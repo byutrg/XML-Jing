@@ -1,13 +1,21 @@
-[%
-	#modified from "Effective Perl Programming" by Joseph N. Hall, et al.
-%]
+package XML::Jing;
+# ABSTRACT: Validate XML files using an RNG schema using the Jing tool
 use strict;
 use warnings;
-
-# ABSTRACT: DEFAULT MODULE TEMPLATE
-package XML::Jing;
-
 # VERSION
+
+use Path::Tiny;
+use File::ShareDir 'dist_dir';
+my $java_location = dist_dir('XML-Jing');
+my $jar_location = path($java_location,'jing.jar');
+print $java_location;
+
+require Inline;
+Inline->import(
+	Java => path($java_location,'RNGValidator.java'),
+	CLASSPATH => $jar_location,
+	STUDY => ['RNGValidator'],
+);
 
 __PACKAGE__->new->_run unless caller;
 
