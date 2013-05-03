@@ -1,4 +1,4 @@
-#basic test file
+#basic check with valid files
 
 use strict;
 use warnings;
@@ -7,7 +7,9 @@ use Test::More;
 use Path::Tiny;
 use FindBin qw($Bin);
 
-plan tests => 1;
-my $jing = XML::Jing->new(path($Bin, 'data','test.rng'));
-ok(1);
-diag $jing->validate(path($Bin, 'data','testPASS.xml'));
+plan tests => 2;
+my $jing;
+ok($jing = XML::Jing->new(path($Bin, 'data','test.rng')), 'successfully reads a valid RNG');
+my $error = $jing->validate(path($Bin, 'data','testPASS.xml'));
+ok(! $error, 'returns nothing when XML file is valid')
+	or note $error;
