@@ -1,6 +1,8 @@
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 import javax.xml.XMLConstants;
 import javax.xml.transform.stream.StreamSource;
@@ -26,11 +28,16 @@ public class RNGValidator
 		else
 			System.setProperty(SchemaFactory.class.getName() + ":" + XMLConstants.RELAXNG_NS_URI, "com.thaiopensource.relaxng.jaxp.XMLSyntaxSchemaFactory");
 		
-		SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.RELAXNG_NS_URI);
-        Schema schema = factory.newSchema(new File(schemaLocation));
+		try{
+			SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.RELAXNG_NS_URI);
+	        Schema schema = factory.newSchema(new File(schemaLocation));
 
-        //get a validator from the schema
-        validator = schema.newValidator();
+	        //get a validator from the schema
+	        validator = schema.newValidator();
+    	}catch(SAXException e){
+    		e.printStackTrace();
+    		throw e;
+    	}
 	}
 
 	/**

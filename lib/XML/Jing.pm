@@ -6,68 +6,39 @@ use warnings;
 
 use Path::Tiny;
 use File::ShareDir 'dist_dir';
-my $java_location = dist_dir('XML-Jing');
-my $jar_location = path($java_location,'jing.jar');
-print $java_location;
+BEGIN{
+	use Config;
+	my $separator = $Config{path_sep} || ':';
+	my $jar_location = path(dist_dir('XML-Jing'),'jing.jar');
+	$ENV{CLASSPATH} .= $separator . $jar_location;
+}
 
 require Inline;
 Inline->import(
-	Java => path($java_location,'RNGValidator.java'),
-	CLASSPATH => $jar_location,
+	Java => path(dist_dir('XML-Jing'),'RNGValidator.java'),
+	# CLASSPATH => $jar_location,
 	STUDY => ['RNGValidator'],
+	# PACKAGE => 'main',
 );
+# __PACKAGE__->new->_run unless caller;
 
-__PACKAGE__->new->_run unless caller;
-
-sub _run {
-  my ($application) = @_;
-  print { $application->{output_fh} }
-    $application->message;
-}
+# sub _run {
+#   my ($application) = @_;
+#   print { $application->{output_fh} }
+#     $application->message;
+# }
 
 sub new {
-  my ($class) = @_;
-  my $application = bless {}, $class;
-  $application->_init;
-  $application;
+  my ($class, $rng_path, $compact) = @_;
+  my $self = bless {}, $class;
+  $self->{validator} = new XML::Jing::RNGValidator("$rng_path", $compact);
+  
+  return $self;
 }
 
-sub _init {
-  my ($application) = @_;
-  $application->{output_fh} = \*STDOUT;
-	$application->{input_fh} = \*STDIN;
-}
-
-sub output_fh {
-	my ( $application, $fh ) = @_;
-	if ($fh) {
-		if(ref($fh) eq 'GLOB'){
-			$application->{output_fh} = $fh;
-		}
-		else{
-			open my $fh2, '>', $fh or die "Couldn't open $fh";
-			$application->{output_fh} = $fh2;
-		}
-	}
-	$application->{output_fh};
-}
-
-sub input_fh {
-	my ( $application, $fh ) = @_;
-	if ($fh) {
-		if(ref($fh) eq 'GLOB'){
-			$application->{input_fh} = $fh;
-		}
-		else{
-			open my $fh2, '<', $fh or die "Couldn't open $fh";
-			$application->{input_fh} = $fh2;
-		}
-	}
-	$application->{input_fh};
-}
-
-sub message {
-  "Your work starts here\n";
+sub validate {
+	my ($self, $xml_path) = @_;
+	return $self->{validator}->validate("$xml_path");
 }
 
 1;
