@@ -30,10 +30,9 @@ This module is a simple interface to Jing which allows checking XML files for va
 
 #add the Jing jar to the system classpath
 BEGIN{
-	use Config;
-	my $separator = $Config{path_sep} || ':';
-	my $jar_location = path(dist_dir('XML-Jing'),'jing.jar');
-	$ENV{CLASSPATH} .= $separator . $jar_location;
+	use Env::Path;
+	my $classpath = Env::Path->CLASSPATH;
+	$classpath->Append(path(dist_dir('XML-Jing'),'jing.jar'));
 }
 
 require Inline;
