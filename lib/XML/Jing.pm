@@ -2,6 +2,9 @@ package XML::Jing;
 # ABSTRACT: Validate XML files using an RNG schema using the Jing tool
 use strict;
 use warnings;
+use Path::Tiny;
+use File::ShareDir 'dist_dir';
+use Carp;
 # VERSION
 
 =head1 NAME
@@ -25,9 +28,6 @@ This module is a simple interface to Jing which allows checking XML files for va
 
 =cut
 
-use Path::Tiny;
-use File::ShareDir 'dist_dir';
-
 #add the Jing jar to the system classpath
 BEGIN{
 	use Config;
@@ -40,7 +40,8 @@ require Inline;
 Inline->import(
 	Java => path(dist_dir('XML-Jing'),'RNGValidator.java'),
 	STUDY => ['RNGValidator'],
-);
+	);
+use Inline::Java qw(caught);
 
 =head1 METHODS
 
@@ -54,11 +55,30 @@ Creates a new instance of C<XML::Jing>.
 =cut
 
 sub new {
-  my ($class, $rng_path, $compact) = @_;
-  my $self = bless {}, $class;
-  $self->{validator} = new XML::Jing::RNGValidator("$rng_path", $compact);
-  
-  return $self;
+	my ($class, $rng_path, $compact) = @_;
+	unless (-f $rng_path){
+		croak "File doesn't exist: $rng_path";
+	}
+	my $self = bless {}, $class;
+
+	#read in the RNG file, catching any errors
+	eval {
+		$self->{validator} = new XML::Jing::RNGValidator("$rng_path", $compact)
+	};
+	if ($@){
+		if (caught("org.xml.sax.SAXParseException")){
+			my $error = 'Error reading RNG file:' . $@->getMessage();
+			#undef $@ so that the Inline::Java object is released (in case someone catches the croak)
+			undef $@;
+			croak $error;
+		}else{
+			# It wasn't a Java exception after all...
+			my $error = $@;
+			undef $@;
+			croak $error ;
+		}
+	}
+	return $self;
 }
 
 =head2 C<validate>
@@ -71,6 +91,9 @@ Returns: The first error found in the document, or C<undef> if no errors were fo
 
 sub validate {
 	my ($self, $xml_path) = @_;
+	unless (-f $xml_path){
+		croak "File doesn't exist: $xml_path";
+	}
 	return $self->{validator}->validate("$xml_path");
 }
 
