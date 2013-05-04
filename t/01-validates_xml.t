@@ -15,5 +15,4 @@ ok(! $error, 'returns nothing when XML file is valid')
 	or note $error;
 
 $error = $jing->validate(path($Bin,'data','testFAIL.xml'));
-
 is($error, 'element "ballBoy" not allowed anywhere; expected the element end-tag or element "player"');

@@ -63,7 +63,7 @@ sub new {
 
 	#read in the RNG file, catching any errors
 	eval {
-		$self->{validator} = new XML::Jing::RNGValidator("$rng_path", $compact)
+		$self->{validator} = XML::Jing::RNGValidator->new("$rng_path", $compact)
 	};
 	if ($@){
 		if (caught("org.xml.sax.SAXParseException")){
@@ -99,7 +99,7 @@ sub validate {
 
 1;
 
-=TODO
+=head1 TODO
 
 Jing has more functionality and options than what I have interfaced with here.
 
