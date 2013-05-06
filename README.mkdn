@@ -36,7 +36,7 @@ Creates a new instance of `XML::Jing`.
 
 ## `validate`
 
-Argument: path to the XML file to validate 
+Argument: path to the XML file to validate
 
 Returns: The first error found in the document, or `undef` if no errors were found.
 

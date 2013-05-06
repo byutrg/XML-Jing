@@ -82,7 +82,7 @@ sub new {
 
 =head2 C<validate>
 
-Argument: path to the XML file to validate 
+Argument: path to the XML file to validate
 
 Returns: The first error found in the document, or C<undef> if no errors were found.
 
