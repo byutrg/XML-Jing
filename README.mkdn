@@ -21,10 +21,6 @@ version 0.02
 
 This module is a simple interface to Jing which allows checking XML files for validity using an RNG file.
 
-# NAME
-
-XML::Jing- validate XML files against RNG using Jing
-
 # METHODS
 
 ## `new`
