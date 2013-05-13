@@ -3,3 +3,5 @@ Unihan-Normalize.sublime-workspace
 _Inline
 .build
 XML-Jing-*/
+*.sublime-workspace
+*.tar.gz

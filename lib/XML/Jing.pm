@@ -7,10 +7,6 @@ use File::ShareDir 'dist_dir';
 use Carp;
 # VERSION
 
-=head1 NAME
-
-XML::Jing- validate XML files against RNG using Jing
-
 =head1 SYNOPSIS
 
 	use XML::Jing;
@@ -103,9 +99,9 @@ sub validate {
 Jing has more functionality and options than what I have interfaced with here.
 
 Also, it would be nice to be able to get ALL of the errors in an XML file, instead of jut the first one.
- 
+
 =head1 SEE ALSO
- 
+
 Jing homepage: L<http://www.thaiopensource.com/relaxng/jing.html>
 
 Inline::Java was used to interface with Jing: L<Inline::Java>
