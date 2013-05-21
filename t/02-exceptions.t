@@ -34,3 +34,9 @@ throws_ok
 	{$jing->validate($nonexistent)}
 	qr/^File doesn't exist: $nonexistent/,
 	'warning for nonexistent XML file';
+
+$errors = '';
+throws_ok
+	{$jing->validate(path($Bin,'data','testBADDTD.xml'))}
+	qr/^Error reading file:/,
+	'warning for nonexistent DTD required by XML file';
