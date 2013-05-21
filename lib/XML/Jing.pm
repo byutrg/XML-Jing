@@ -51,7 +51,7 @@ Creates a new instance of C<XML::Jing>.
 
 sub new {
 	my ($class, $rng_path, $compact) = @_;
-	unless (-f $rng_path){
+	unless (-e $rng_path){
 		croak "File doesn't exist: $rng_path";
 	}
 	my $self = bless {}, $class;
@@ -62,7 +62,7 @@ sub new {
 	};
 	if ($@){
 		if (caught("org.xml.sax.SAXParseException")){
-			my $error = 'Error reading RNG file:' . $@->getMessage();
+			my $error = 'Error reading RNG file: ' . $@->getMessage();
 			#undef $@ so that the Inline::Java object is released (in case someone catches the croak)
 			undef $@;
 			croak $error;
@@ -86,10 +86,28 @@ Returns: The first error found in the document, or C<undef> if no errors were fo
 
 sub validate {
 	my ($self, $xml_path) = @_;
-	unless (-f $xml_path){
+	unless (-e $xml_path){
 		croak "File doesn't exist: $xml_path";
 	}
-	return $self->{validator}->validate("$xml_path");
+
+	#validate the file, catching any errors
+	eval {
+		my $errors = $self->{validator}->validate("$xml_path")
+	};
+	if($@){
+		if (caught("java.io.FileNotFoundException")){
+			my $error = 'Error reading file: ' . $@->getMessage();
+			#undef $@ so that the Inline::Java object is released (in case someone catches the croak)
+			undef $@;
+			croak $error;
+		}else{
+			warn 'croaking!';
+			my $error = $@;
+			undef $@;
+			croak $error;
+		}
+	}
+	return $self;
 }
 
 1;
