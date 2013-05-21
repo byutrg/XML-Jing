@@ -7,7 +7,7 @@ use Test::More;
 use Test::Exception;
 use Path::Tiny;
 use FindBin qw($Bin);
-plan tests => 5;
+plan tests => 6;
 
 my $jing;
 my $nonexistent = 'nonexistent.xml';

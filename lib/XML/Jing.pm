@@ -91,8 +91,9 @@ sub validate {
 	}
 
 	#validate the file, catching any errors
+	my $errors;
 	eval {
-		my $errors = $self->{validator}->validate("$xml_path")
+		$errors = $self->{validator}->validate("$xml_path")
 	};
 	if($@){
 		if (caught("java.io.FileNotFoundException")){
@@ -107,7 +108,7 @@ sub validate {
 			croak $error;
 		}
 	}
-	return $self;
+	return $errors;
 }
 
 1;
