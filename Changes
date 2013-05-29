@@ -2,7 +2,7 @@ Revision history for XML::Jing
 
 
 {{$NEXT}}
-
+	Fixed copyright information
 0.03      2013-05-21 15:35:57 America/Los_Angeles
 	Better error checking during validation
 0.02      2013-05-13 10:37:57 America/Los_Angeles
