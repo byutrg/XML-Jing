@@ -4,7 +4,7 @@ XML::Jing - Validate XML files using an RNG schema using the Jing tool
 
 # VERSION
 
-version 0.03
+version 0.04
 
 # SYNOPSIS
 
@@ -54,7 +54,7 @@ Nathan Glenn <garfieldnate@gmail.com>
 
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Nathan Glenn.
+This software is copyright (c) 2013 by BYU Translation Research Group.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
